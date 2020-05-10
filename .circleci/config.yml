@@ -2,6 +2,7 @@ version: 2.1
 
 jobs:
   cron-run:
+    resource_class: small
     docker:
       - image: kesin/ci_analyzer:latest
     steps:
@@ -23,7 +24,6 @@ jobs:
             GIIHUB_TOKEN: $GITHUB_TOKEN
             CIRCLECI_TOKEN: $CIRCLECI_TOKEN
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
-            CI_ANALYZER_DEBUG: "1"
       - store_artifacts:
           name: Store local_exporter output files
           path: output
@@ -37,5 +37,15 @@ jobs:
 workflows:
   version: 2
   cron:
+    triggers:
+      - schedule:
+          cron: "0 * * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - cron-run
+  commit:
     jobs:
       - cron-run
