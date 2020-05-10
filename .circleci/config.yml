@@ -13,7 +13,8 @@ jobs:
       - restore_cache:
           name: Restore last run store files
           keys:
-            - cache-${CACHE_VERSION}
+            - cache-${CACHE_VERSION}-
+      - run: cat .ci_analyzer/* | true
       - run:
           name: run ci_analyzer
           command: node /app/dist/index.js -c ./ci_analyzer.yaml
@@ -27,9 +28,10 @@ jobs:
           path: output
       - save_cache:
           name: Save last run store files
-          key: cache-${CACHE_VERSION}
+          key: cache-${CACHE_VERSION}-{{ .BuildNum }}
           paths:
           - .ci_analyzer
+      - run: cat .ci_analyzer/* | true
 workflows:
   version: 2
   cron:
