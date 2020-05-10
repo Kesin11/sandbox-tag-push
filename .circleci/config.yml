@@ -15,10 +15,8 @@ jobs:
           name: Restore last run store files
           keys:
             - cache-${CACHE_VERSION}-
-      - run: ls .ci_analyzer/** || true
-      - run: cat .ci_analyzer/last_run/*.json || true
       - run:
-          name: run ci_analyzer
+          name: Run CIAnalyzer
           command: node /app/dist/index.js -c ./ci_analyzer.yaml
           environment:
             GIIHUB_TOKEN: $GITHUB_TOKEN
@@ -27,8 +25,6 @@ jobs:
       - store_artifacts:
           name: Store local_exporter output files
           path: output
-      - run: ls .ci_analyzer/** || true
-      - run: cat .ci_analyzer/last_run/*.json || true
       - save_cache:
           name: Save last run store files
           key: cache-${CACHE_VERSION}-{{ .BuildNum }}
@@ -44,8 +40,5 @@ workflows:
             branches:
               only:
                 - master
-    jobs:
-      - cron-run
-  commit:
     jobs:
       - cron-run
