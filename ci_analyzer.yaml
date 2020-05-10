@@ -1,0 +1,13 @@
+github:
+  repos:
+    - Kesin11/CIAnalyzer
+  exporter: &exporter
+    local:
+      outDir: ./output
+      format: json
+
+circleci:
+  # baseUrl: https://circleci.com/api/v1.1 # default
+  repos:
+    - Kesin11/CIAnalyzer
+  exporter: *exporter # Can use yaml anchor

@@ -1,0 +1,36 @@
+version: 2.1
+
+jobs:
+  cron-run:
+    docker:
+      - image: kesin/ci_analyzer:latest
+    steps:
+      - checkout
+      - run:
+          name: Create service account json
+          # You need to stringify your service account json using base64 and register to CircleCI ENV
+          command: base64 --decode $SERVICE_ACCOUNT > service_account.json
+      - restore_cache:
+          name: Restore last run store files
+          keys:
+            - cache-${CACHE_VERSION}
+      - run:
+          name: run ci_analyzer
+          command: node /app/dist/index.js
+          evironment:
+            GIIHUB_TOKEN: $GITHUB_TOKEN
+            CIRCLECI_TOKEN: $CIRCLECI_TOKEN
+            GOOGLE_APPLICATION_CREDENTIALS: service_account.json
+      - store_artifacts:
+          name: Store local_exporter output files
+          path: output
+      - save_cache:
+          name: Save last run store files
+          key: cache-${CACHE_VERSION}
+          paths:
+          - .ci_analyzer
+workflows:
+  version: 2
+  cron:
+    jobs:
+      - cron-run
