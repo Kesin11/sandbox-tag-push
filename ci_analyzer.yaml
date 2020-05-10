@@ -10,4 +10,5 @@ circleci:
   # baseUrl: https://circleci.com/api/v1.1 # default
   repos:
     - Kesin11/CIAnalyzer
+    - Kesin11/sandbox-tag-push
   exporter: *exporter # Can use yaml anchor
