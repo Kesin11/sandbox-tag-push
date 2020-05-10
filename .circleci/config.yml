@@ -9,7 +9,7 @@ jobs:
       - run:
           name: Create service account json
           # You need to stringify your service account json using base64 and register to CircleCI ENV
-          command: base64 --decode $SERVICE_ACCOUNT > service_account.json
+          command: echo $SERVICE_ACCOUNT | base64 --decode > service_account.json
       - restore_cache:
           name: Restore last run store files
           keys:
@@ -17,7 +17,7 @@ jobs:
       - run:
           name: run ci_analyzer
           command: node /app/dist/index.js
-          evironment:
+          environment:
             GIIHUB_TOKEN: $GITHUB_TOKEN
             CIRCLECI_TOKEN: $CIRCLECI_TOKEN
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
