@@ -16,11 +16,12 @@ jobs:
             - cache-${CACHE_VERSION}
       - run:
           name: run ci_analyzer
-          command: node /app/dist/index.js
+          command: node /app/dist/index.js -c ./ci_analyzer.yaml
           environment:
             GIIHUB_TOKEN: $GITHUB_TOKEN
             CIRCLECI_TOKEN: $CIRCLECI_TOKEN
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
+            CI_ANALYZER_DEBUG: "1"
       - store_artifacts:
           name: Store local_exporter output files
           path: output
